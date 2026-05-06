@@ -76,8 +76,8 @@ export default function AdminPage() {
       supabase.from('orders').select('*').order('created_at', { ascending: false }),
       supabase.from('config').select('value').eq('key', 'aviso').single(),
     ])
-    if (orders) setPedidos(orders as Order[])
-    if (cfg) applyAviso(cfg.value as AvisoConfig)
+    if (orders) setPedidos(orders as unknown as Order[])
+    if (cfg) applyAviso(cfg.value as unknown as AvisoConfig)
     setSyncMsg('')
   }
 
@@ -163,12 +163,12 @@ export default function AdminPage() {
     const total = calcTotal(itens)
 
     if (editId !== null) {
-      await supabase.from('orders').update({ nome: mNome.trim(), ref: mRef.trim(), telefone: mTel.replace(/\D/g, ''), itens, total }).eq('id', editId)
+      await supabase.from('orders').update({ nome: mNome.trim(), ref: mRef.trim(), telefone: mTel.replace(/\D/g, ''), itens: itens as unknown as import('@/integrations/supabase/types').Json, total }).eq('id', editId)
       setModalOpen(false); showToast(`✏️ ${mNome.trim()} atualizado(a)!`)
     } else {
       await supabase.from('orders').insert({
         nome: mNome.trim(), ref: mRef.trim(), telefone: mTel.replace(/\D/g, ''),
-        cep: '', cidade: 'Itu', estado: 'SP', itens, total, obs: '',
+        cep: '', cidade: 'Itu', estado: 'SP', itens: itens as unknown as import('@/integrations/supabase/types').Json, total, obs: '',
         entregue: false, pago: false, entrega: 'pendente', fonte: 'manual',
       })
       setModalOpen(false); setFiltro('todos'); showToast(`✅ ${mNome.trim()} adicionado(a)!`)

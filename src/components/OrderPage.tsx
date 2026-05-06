@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { supabase } from '../lib/supabase'
-import { PRODUTOS, WPP_LOJA, AVISO_DEFAULT, fmt } from '../lib/types'
-import type { AvisoConfig } from '../lib/types'
+import { supabase } from '@/lib/supabase'
+import { PRODUTOS, WPP_LOJA, AVISO_DEFAULT, fmt } from '@/lib/types'
+import type { AvisoConfig } from '@/lib/types'
 
 type Qtds = Record<string, number>
 

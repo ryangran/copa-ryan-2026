@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { supabase } from '../lib/supabase'
-import { AVISO_DEFAULT, CUSTOS, PRECOS, TIPO_LABEL, PIX_CHAVE, PIX_NOME, fmt, calcTotal, calcCusto } from '../lib/types'
-import type { AvisoConfig, Item, Order } from '../lib/types'
+import { supabase } from '@/lib/supabase'
+import { AVISO_DEFAULT, CUSTOS, PRECOS, TIPO_LABEL, PIX_CHAVE, PIX_NOME, fmt, calcTotal, calcCusto } from '@/lib/types'
+import type { AvisoConfig, Item, Order } from '@/lib/types'
 
 const ADMIN_USER = 'Ryanzinkkj'
 const ADMIN_PASS = '160206Ryan#'

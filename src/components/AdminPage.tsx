@@ -51,33 +51,50 @@ export default function AdminPage() {
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   useEffect(() => {
-    if (sessionStorage.getItem(SESSION_KEY) === 'ok') setLogado(true)
+    try {
+      if (sessionStorage.getItem(SESSION_KEY) === 'ok') setLogado(true)
+    } catch { /* sessionStorage indisponível */ }
   }, [])
 
   useEffect(() => {
     if (!logado) return
     carregar()
-    const ch = supabase.channel('admin-rt')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => carregar())
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'config' }, (p) => {
-        if ((p.new as { key: string }).key === 'aviso') applyAviso((p.new as { key: string; value: AvisoConfig }).value)
-      })
-      .subscribe()
-    return () => { supabase.removeChannel(ch) }
+    let ch: ReturnType<typeof supabase.channel> | null = null
+    try {
+      ch = supabase.channel('admin-rt')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => carregar())
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'config' }, (p) => {
+          if ((p.new as { key: string }).key === 'aviso') applyAviso((p.new as { key: string; value: AvisoConfig }).value)
+        })
+        .subscribe()
+    } catch { /* realtime indisponível */ }
+    return () => { if (ch) supabase.removeChannel(ch) }
   }, [logado])
 
   function applyAviso(cfg: AvisoConfig) {
-    setAviso(cfg); setAvisoTitulo(cfg.titulo); setAvisoMsg(cfg.mensagem); setAvisoRodape(cfg.rodape)
+    if (!cfg) return
+    setAviso(cfg)
+    setAvisoTitulo(cfg.titulo ?? '')
+    setAvisoMsg(cfg.mensagem ?? '')
+    setAvisoRodape(cfg.rodape ?? '')
   }
 
   async function carregar() {
     setSyncMsg('🔄 Sincronizando...')
-    const [{ data: orders }, { data: cfg }] = await Promise.all([
-      supabase.from('orders').select('*').order('created_at', { ascending: false }),
-      supabase.from('config').select('value').eq('key', 'aviso').single(),
-    ])
-    if (orders) setPedidos(orders as unknown as Order[])
-    if (cfg) applyAviso(cfg.value as unknown as AvisoConfig)
+    try {
+      const [ordersRes, cfgRes] = await Promise.all([
+        supabase.from('orders').select('*').order('created_at', { ascending: false }),
+        supabase.from('config').select('value').eq('key', 'aviso').maybeSingle(),
+      ])
+      if (ordersRes.data) {
+        const orders = (ordersRes.data as unknown as Order[]).map(o => ({
+          ...o,
+          itens: Array.isArray(o.itens) ? o.itens : [],
+        }))
+        setPedidos(orders)
+      }
+      if (cfgRes.data?.value) applyAviso(cfgRes.data.value as unknown as AvisoConfig)
+    } catch { /* falha silenciosa */ }
     setSyncMsg('')
   }
 
@@ -215,11 +232,11 @@ export default function AdminPage() {
   )
 
   // ── TOTAIS ──
-  const totalGeral = pedidos.reduce((s, c) => s + c.total, 0)
-  const totalPacotes = pedidos.reduce((s, c) => s + (c.itens.find(i => i.id === 'pacote')?.qty ?? 0), 0)
-  const totalAlbuns = pedidos.reduce((s, c) => s + c.itens.filter(i => i.id !== 'pacote').reduce((a, i) => a + i.qty, 0), 0)
-  const totalPago = pedidos.filter(c => c.pago).reduce((s, c) => s + c.total, 0)
-  const totalCusto = pedidos.reduce((s, c) => s + calcCusto(c.itens), 0)
+  const totalGeral = pedidos.reduce((s, c) => s + (c.total ?? 0), 0)
+  const totalPacotes = pedidos.reduce((s, c) => s + ((c.itens ?? []).find(i => i.id === 'pacote')?.qty ?? 0), 0)
+  const totalAlbuns = pedidos.reduce((s, c) => s + (c.itens ?? []).filter(i => i.id !== 'pacote').reduce((a, i) => a + i.qty, 0), 0)
+  const totalPago = pedidos.filter(c => c.pago).reduce((s, c) => s + (c.total ?? 0), 0)
+  const totalCusto = pedidos.reduce((s, c) => s + calcCusto(c.itens ?? []), 0)
   const lucroTotal = totalGeral - totalCusto
   const lucroRecebido = pedidos.filter(c => c.pago).reduce((s, c) => s + (c.total - calcCusto(c.itens)), 0)
   const pct = totalGeral > 0 ? ((lucroTotal / totalGeral) * 100).toFixed(1) : '0.0'
@@ -331,7 +348,8 @@ export default function AdminPage() {
             ? <div className="no-results">Nenhum cliente nessa categoria.</div>
             : pedidosFiltrados.map(c => {
               const isOnline = c.fonte === 'online'
-              const temTel = c.telefone.replace(/\D/g, '').length > 0
+              const temTel = (c.telefone ?? '').replace(/\D/g, '').length > 0
+              const itens = c.itens ?? []
               return (
                 <div key={c.id} className={`card${c.pago ? ' pago' : ''}${isOnline ? ' online' : ''}`}>
                   <div className="card-header">
@@ -348,9 +366,9 @@ export default function AdminPage() {
                     </button>
                   </div>
                   <div className="card-body">
-                    {c.itens.length === 0
+                    {itens.length === 0
                       ? <div style={{ fontSize: '.8rem', color: '#999', padding: '3px 0' }}>Sem itens</div>
-                      : c.itens.map((i, idx) => (
+                      : itens.map((i, idx) => (
                         <div key={idx} className="item-line">
                           <div className="item-desc"><span>{i.id === 'pacote' ? '🎴' : '📚'}</span>{i.qty}x {TIPO_LABEL[i.id] ?? i.nome}</div>
                           <div className="item-price">{fmt(i.qty * i.preco)}</div>

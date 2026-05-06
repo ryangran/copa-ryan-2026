@@ -30,7 +30,7 @@ export default function OrderPage() {
 
   useEffect(() => {
     supabase.from('config').select('value').eq('key', 'aviso').single()
-      .then(({ data }) => { if (data) setAviso(data.value as AvisoConfig) })
+      .then(({ data }) => { if (data) setAviso(data.value as unknown as AvisoConfig) })
 
     const ch = supabase.channel('order-cfg')
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'config' }, (p) => {

@@ -75,8 +75,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Vendas Copa 2026" },
       { name: "description", content: "Monte seu pedido de figurinhas e álbuns da Copa do Mundo 2026" },
       { property: "og:title", content: "Vendas Copa 2026" },
-      { property: "og:description", content: "Figurinhas e álbuns da Copa do Mundo 2026 - Itu/SP" },
+      { property: "og:description", content: "Monte seu pedido de figurinhas e álbuns da Copa do Mundo 2026" },
       { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "Vendas Copa 2026" },
+      { name: "twitter:description", content: "Monte seu pedido de figurinhas e álbuns da Copa do Mundo 2026" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/25b0e5d3-4896-4edc-82e2-f4185975f3a6/id-preview-593201af--20d0f010-746d-45df-a533-164a39694189.lovable.app-1778092323730.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/25b0e5d3-4896-4edc-82e2-f4185975f3a6/id-preview-593201af--20d0f010-746d-45df-a533-164a39694189.lovable.app-1778092323730.png" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       {

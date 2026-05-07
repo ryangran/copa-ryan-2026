@@ -4,6 +4,7 @@ const W = 440, H = 320
 const GL = 90, GR = 350, GT = 38, GB = 130
 const GW = GR - GL, GH = GB - GT
 const BX0 = W / 2, BY0 = H - 44
+const CHAR_SCALE = 0.62
 
 function lerp(a: number, b: number, t: number) { return a + (b - a) * t }
 function easeOut(t: number) { return 1 - (1 - t) ** 2.5 }
@@ -177,12 +178,13 @@ function drawKeeper(ctx: CanvasRenderingContext2D, kx: number, g: GS) {
   // Shadow
   ctx.fillStyle = `rgba(0,0,0,${clamp(0.18 - Math.abs(dy) * 0.003, 0.05, 0.18)})`
   ctx.beginPath()
-  ctx.ellipse(kx + dx * 0.5, GB - 2, 22 + Math.abs(dx) * 0.2, 4, 0, 0, Math.PI * 2)
+  ctx.ellipse(kx + dx * 0.5, GB - 2, (22 + Math.abs(dx) * 0.2) * CHAR_SCALE, 4 * CHAR_SCALE, 0, 0, Math.PI * 2)
   ctx.fill()
 
   ctx.save()
   ctx.translate(kx + dx, goalCY + dy)
   ctx.rotate(rot)
+  ctx.scale(CHAR_SCALE, CHAR_SCALE)
 
   // --- Body local coords (origin = torso center) ---
   // Legs
@@ -377,12 +379,13 @@ function drawNeymar(ctx: CanvasRenderingContext2D, g: GS) {
 
   // Shadow
   ctx.fillStyle = 'rgba(0,0,0,0.28)'
-  ctx.beginPath(); ctx.ellipse(nx, baseY + 2, 20 - bodyLift * 0.3, 5 - bodyLift * 0.15, 0, 0, Math.PI * 2); ctx.fill()
+  ctx.beginPath(); ctx.ellipse(nx, baseY + 2, (20 - bodyLift * 0.3) * CHAR_SCALE, (5 - bodyLift * 0.15) * CHAR_SCALE, 0, 0, Math.PI * 2); ctx.fill()
 
   // --- Draw character body with lean transform ---
   ctx.save()
   ctx.translate(tx2, by)
   ctx.rotate(bodyLean)
+  ctx.scale(CHAR_SCALE, CHAR_SCALE)
 
   // Plant leg (left) - thigh + shin
   ctx.strokeStyle = '#1e3a8a'; ctx.lineWidth = 11; ctx.lineCap = 'round'

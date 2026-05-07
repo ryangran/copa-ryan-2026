@@ -45,6 +45,7 @@ main{max-width:600px;margin:0 auto;padding:22px 16px 130px;}
 .prod-qty-badge{position:absolute;top:-7px;right:-7px;background:var(--verde);color:#fff;font-size:.65rem;font-weight:700;min-width:22px;height:22px;border-radius:11px;display:none;align-items:center;justify-content:center;padding:0 5px;box-shadow:0 2px 6px rgba(0,0,0,.2);}
 .prod-card.selected .prod-qty-badge{display:flex;}
 .prod-emoji{font-size:2.2rem;display:block;margin-bottom:5px;}
+.prod-img{width:100%;max-width:110px;height:100px;object-fit:contain;display:block;margin:0 auto 8px;border-radius:6px;}
 .prod-nome{font-size:.77rem;font-weight:600;color:var(--texto);line-height:1.3;margin-bottom:5px;min-height:32px;display:flex;align-items:center;justify-content:center;}
 .prod-preco{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:var(--verde);letter-spacing:1px;margin-bottom:11px;}
 .prod-card.selected .prod-preco{color:var(--verde-claro);}

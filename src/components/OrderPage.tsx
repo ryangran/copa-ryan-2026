@@ -226,7 +226,10 @@ export default function OrderPage() {
             return (
               <div key={p.id} className={`prod-card${p.destaque ? ' destaque' : ''}${qty > 0 ? ' selected' : ''}`}>
                 <div className="prod-qty-badge">{qty}</div>
-                <span className="prod-emoji">{p.emoji}</span>
+                {p.img
+                  ? <img src={p.img} alt={p.nome} className="prod-img" />
+                  : <span className="prod-emoji">{p.emoji}</span>
+                }
                 <div className="prod-nome">{p.nome}</div>
                 <div className="prod-preco">{fmt(p.preco)}</div>
                 <div className="qty-ctrl">

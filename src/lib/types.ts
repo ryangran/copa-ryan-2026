@@ -32,11 +32,11 @@ export interface AvisoConfig {
 }
 
 export const PRODUTOS = [
-  { id: 'pacote',         nome: 'Figurinha Pacote',       emoji: '🎴', preco: 5.90,  destaque: true  },
-  { id: 'capaDuraOuro',   nome: 'Álbum Capa Dura Ouro ✨', emoji: '🥇', preco: 67.92, destaque: false },
-  { id: 'capaDuraPrata',  nome: 'Álbum Capa Dura Prata',   emoji: '🥈', preco: 66.92, destaque: false },
-  { id: 'capaDuraNormal', nome: 'Álbum Capa Dura Normal',  emoji: '📚', preco: 62.62, destaque: false },
-  { id: 'capaMole',       nome: 'Álbum Capa Mole',         emoji: '📗', preco: 21.92, destaque: false },
+  { id: 'pacote',         nome: 'Pacote de Figurinhas',   emoji: '🎴', preco: 5.90,  destaque: true,  img: null },
+  { id: 'capaDuraOuro',   nome: 'Álbum Capa Dura Ouro',   emoji: '🥇', preco: 67.92, destaque: false, img: '/produtos/capa-dura-ouro.jpg' },
+  { id: 'capaDuraPrata',  nome: 'Álbum Capa Dura Prata',  emoji: '🥈', preco: 66.92, destaque: false, img: '/produtos/capa-dura-prata.jpg' },
+  { id: 'capaDuraNormal', nome: 'Álbum Capa Dura',        emoji: '📚', preco: 62.62, destaque: false, img: '/produtos/capa-dura.jpg' },
+  { id: 'capaMole',       nome: 'Álbum Capa Mole',        emoji: '📗', preco: 21.92, destaque: false, img: null },
 ]
 
 export const PRECOS: Record<string, number> = {

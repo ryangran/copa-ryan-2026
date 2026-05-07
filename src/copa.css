@@ -181,7 +181,46 @@ footer{text-align:center;padding:18px 16px;font-size:.72rem;color:#888;backgroun
 .mp-entrega-pill{font-size:.75rem;font-weight:600;padding:5px 12px;border-radius:100px;}
 .mp-total-val{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--amarelo);}
 .mp-realtime-hint{text-align:center;font-size:.7rem;color:rgba(255,255,255,.2);margin-top:8px;}
-.mp-rodape{margin-top:48px;font-size:.7rem;color:rgba(255,255,255,.2);text-align:center;}
+.mp-rodape{margin-top:16px;font-size:.7rem;color:rgba(255,255,255,.2);text-align:center;}
+
+/* ── PÊNALTI GAME ── */
+.pg-wrap{width:100%;max-width:440px;margin-top:28px;}
+.pg-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding:0 4px;}
+.pg-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--amarelo);letter-spacing:2px;}
+.pg-score{font-size:.75rem;color:rgba(255,255,255,.4);}
+.pg-field{position:relative;width:100%;height:280px;background:linear-gradient(180deg,#1a6b1a 0%,#1e7a1e 40%,#1a6b1a 40%,#1e7a1e 80%,#1a6b1a 80%);border-radius:14px;overflow:hidden;border:2px solid rgba(255,255,255,.1);cursor:pointer;}
+/* Goal */
+.pg-goal-line{position:absolute;top:32px;left:10%;width:80%;height:2px;background:rgba(255,255,255,.7);}
+.pg-post{position:absolute;top:0;width:4px;height:34px;background:#fff;border-radius:0 0 3px 3px;}
+.pg-post.left{left:10%;}
+.pg-post.right{right:10%;}
+.pg-net{position:absolute;top:0;left:10%;width:80%;height:34px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.12) 0,rgba(255,255,255,.12) 1px,transparent 1px,transparent 14px),repeating-linear-gradient(180deg,rgba(255,255,255,.12) 0,rgba(255,255,255,.12) 1px,transparent 1px,transparent 10px);border-bottom:none;}
+/* Area */
+.pg-area{position:absolute;top:34px;left:20%;width:60%;height:70px;border:1.5px solid rgba(255,255,255,.25);border-top:none;border-radius:0 0 8px 8px;}
+/* Spot */
+.pg-spot{position:absolute;left:calc(50% - 3px);top:120px;width:6px;height:6px;background:rgba(255,255,255,.5);border-radius:50%;}
+/* Zones */
+.pg-zones{position:absolute;top:2px;left:10%;width:80%;height:30px;display:flex;gap:4px;z-index:5;}
+.pg-zone-btn{flex:1;background:rgba(255,220,0,.25);border:1.5px solid rgba(255,220,0,.5);color:var(--amarelo);font-size:1rem;font-weight:700;border-radius:4px;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;}
+.pg-zone-btn:hover{background:rgba(255,220,0,.45);}
+/* Keeper */
+.pg-keeper{position:absolute;top:4px;width:42px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;transition:left .35s ease-out;z-index:3;}
+.pg-keeper-head{width:18px;height:18px;background:#e8a87c;border-radius:50%;border:2px solid #c07840;}
+.pg-keeper-shirt{width:28px;height:16px;background:#dc2626;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:700;color:#fff;letter-spacing:.5px;}
+.pg-keeper-arms{width:38px;height:5px;background:#dc2626;border-radius:3px;margin-top:-14px;}
+/* Ball */
+.pg-ball{position:absolute;font-size:1.8rem;transform:translateX(-50%) translateY(-50%);z-index:4;pointer-events:none;}
+/* Neymar */
+.pg-neymar{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;}
+.pg-neymar-head{width:20px;height:20px;background:#c8956c;border-radius:50%;border:2px solid #a06840;}
+.pg-neymar-shirt{width:30px;height:18px;background:#FFD700;border-radius:4px;border:1.5px solid #009c3b;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:900;color:#003087;letter-spacing:.5px;}
+.pg-neymar-label{font-size:.48rem;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:1px;margin-top:1px;}
+/* Result */
+.pg-result-banner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;padding:10px 24px;border-radius:12px;z-index:10;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);}
+.pg-result-banner.gol{background:rgba(255,215,0,.9);color:#003d00;}
+.pg-result-banner.save{background:rgba(220,38,38,.85);color:#fff;}
+/* Hint */
+.pg-hint-txt{position:absolute;bottom:8px;width:100%;text-align:center;font-size:.68rem;color:rgba(255,255,255,.35);pointer-events:none;}
 
 @media(max-width:420px){
   .prod-nome{font-size:.72rem;}

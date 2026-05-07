@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { TIPO_LABEL, fmt } from '@/lib/types'
 import type { Order } from '@/lib/types'
+import PenaltiGame from './PenaltiGame'
 
 const STATUS_ENTREGA: Record<string, { icon: string; texto: string; cor: string; bg: string }> = {
   pendente: { icon: '⏳', texto: 'Aguardando separação', cor: '#f59e0b', bg: 'rgba(245,158,11,.15)' },
@@ -144,6 +145,8 @@ export default function MyOrdersPage() {
             )
         )}
       </div>
+
+      <PenaltiGame />
 
       <div className="mp-rodape">🏆 Vendas Copa 2026 · Itu/SP</div>
     </div>

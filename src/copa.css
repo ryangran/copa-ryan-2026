@@ -135,6 +135,29 @@ footer{text-align:center;padding:18px 16px;font-size:.72rem;color:#888;backgroun
 /* ── LOCK MSG ── */
 .lock-msg{background:#fff3cd;border:2px solid #ffc107;border-radius:12px;padding:14px 18px;text-align:center;font-size:.88rem;color:#7a5a00;margin-top:20px;line-height:1.5;}
 
+/* ── TRACK LINK BOX (success screen) ── */
+.track-link-box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:18px;width:100%;max-width:300px;margin:0 0 16px;text-align:center;}
+.track-link-title{font-weight:700;font-size:.95rem;color:#fff;margin-bottom:4px;}
+.track-link-sub{font-size:.75rem;color:rgba(255,255,255,.55);margin-bottom:12px;line-height:1.5;}
+
+/* ── TRACKING PAGE ── */
+.track-wrap{min-height:100vh;background:linear-gradient(160deg,#001a00,#003d00);padding:28px 16px 48px;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.track-loading,.track-notfound{color:rgba(255,255,255,.7);font-size:.95rem;margin-top:60px;text-align:center;}
+.track-header{text-align:center;margin-bottom:4px;}
+.track-badge{display:inline-block;background:rgba(255,215,0,.15);color:var(--amarelo);border:1px solid rgba(255,215,0,.3);border-radius:100px;padding:4px 14px;font-size:.72rem;font-weight:700;letter-spacing:1px;margin-bottom:10px;}
+.track-title{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:var(--amarelo);letter-spacing:3px;margin:0 0 6px;}
+.track-sub{font-size:.87rem;color:rgba(255,255,255,.7);line-height:1.5;}
+.track-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px 20px;width:100%;max-width:400px;}
+.track-section-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.45);margin-bottom:12px;}
+.track-status-row{display:flex;align-items:center;gap:12px;border:2px solid;border-radius:10px;padding:12px 14px;}
+.track-status-text{font-weight:700;font-size:.95rem;}
+.track-pago-badge{display:inline-block;padding:8px 18px;border-radius:100px;font-weight:700;font-size:.88rem;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);}
+.track-pago-badge.pago{background:#d1fae5;color:#065f46;}
+.track-item{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:rgba(255,255,255,.85);padding:7px 0;border-bottom:1px solid rgba(255,255,255,.07);}
+.track-item:last-of-type{border-bottom:none;}
+.track-total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:2px solid rgba(255,255,255,.15);font-weight:700;font-size:1rem;color:var(--amarelo);}
+.track-footer{font-size:.72rem;color:rgba(255,255,255,.35);text-align:center;}
+
 @media(max-width:420px){
   .prod-nome{font-size:.72rem;}
   .hero h1{font-size:1.9rem;}

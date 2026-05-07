@@ -28,6 +28,7 @@ export default function OrderPage() {
   const [wppLink, setWppLink] = useState('')
   const [pixQrUrl, setPixQrUrl] = useState('')
   const [pixBrCode, setPixBrCode] = useState('')
+  const [trackUrl, setTrackUrl] = useState('')
   const [toast, setToast] = useState('')
   const [toastShow, setToastShow] = useState(false)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -149,6 +150,8 @@ export default function OrderPage() {
 
     const texto = buildTexto()
 
+    const token = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10)
+
     await supabase.from('orders').insert({
       nome: nome.trim(),
       telefone: telefone.replace(/\D/g, ''),
@@ -164,7 +167,10 @@ export default function OrderPage() {
       entrega: 'pendente',
       fonte: 'online',
       pix_status: 'aguardando',
+      token,
     })
+
+    setTrackUrl(`${window.location.origin}/pedido/${token}`)
 
     const link = `https://wa.me/${WPP_LOJA}?text=${encodeURIComponent(texto)}`
     setWppLink(link)
@@ -174,7 +180,7 @@ export default function OrderPage() {
   }
 
   function novoPedido() {
-    setSucesso(false); setPixQrUrl(''); setPixBrCode('')
+    setSucesso(false); setPixQrUrl(''); setPixBrCode(''); setTrackUrl('')
     setQtys({}); setNome(''); setTelefone(''); setCep('')
     setLogradouro(''); setBairro(''); setComplemento(''); setObs(''); setErros([])
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -361,6 +367,23 @@ export default function OrderPage() {
           <div className="suc-total-label">Valor do pedido</div>
           <div className="suc-total-val">{fmt(sucTotal)}</div>
         </div>
+
+        {trackUrl && (
+          <div className="track-link-box">
+            <div className="track-link-title">🔗 Acompanhe seu pedido</div>
+            <div className="track-link-sub">Salve o link abaixo para ver o status da entrega e pagamento</div>
+            <button
+              className="btn-copiar-pix"
+              onClick={() => {
+                navigator.clipboard.writeText(trackUrl)
+                  .then(() => showToast('✅ Link copiado!'))
+                  .catch(() => showToast('⚠️ Não foi possível copiar.'))
+              }}
+            >
+              📋 Copiar link do pedido
+            </button>
+          </div>
+        )}
 
         {pixQrUrl && (
           <div className="pix-box">

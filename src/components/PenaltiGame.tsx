@@ -113,7 +113,9 @@ function drawBall(ctx: CanvasRenderingContext2D, x: number, y: number, scale: nu
 
 function drawKeeper(ctx: CanvasRenderingContext2D, kx: number, g: GS) {
   const { phase, t, tx, ty, scored, idleT } = g
-  const goalCY = GT + GH * 0.44  // ~79
+  // Anchor feet at GB (goal ground line), accounting for scale
+  const footDY_stand = 36 + 0.35 * 10  // legBend idle ≈ 0.35
+  const goalCY = GB - footDY_stand * CHAR_SCALE  // ≈ 106
 
   const diveLeft  = tx < W / 2 - 28
   const diveRight = tx > W / 2 + 28
@@ -620,11 +622,19 @@ export default function PenaltiGame() {
         g.kx = lerp(W / 2, g.ktx, easeOut(kp))
 
         if (g.t >= 1) {
-          const KW2 = 58
-          const kLeft = g.kx - KW2 / 2 - 10
-          const kRight = g.kx + KW2 / 2 + 10
+          // Mirror dive-offset logic from drawKeeper at t=1
+          const dd = g.tx < W/2 - 28 ? -1 : g.tx > W/2 + 28 ? 1 : 0
+          const hiShot = g.ty < GT + GH * 0.38
+          const loShot = g.ty > GT + GH * 0.65
+          const finalDX = hiShot ? dd * 16 : dd !== 0 ? dd * 60 : 0
+          const finalDY = hiShot ? -44 : dd !== 0 ? (loShot ? 22 : 14) : 12
+          const visualKX = g.kx + finalDX
+          const visualKY = (GB - (36 + 0.35 * 10) * CHAR_SCALE) + finalDY
+          const halfW = 38 * CHAR_SCALE   // scaled arm-span half-width
+          const halfH = 38 * CHAR_SCALE   // scaled body half-height
           const inGoal = g.tx >= GL && g.tx <= GR && g.ty >= GT && g.ty <= GB
-          const blocked = g.tx >= kLeft && g.tx <= kRight
+          const blocked = g.tx >= visualKX - halfW && g.tx <= visualKX + halfW
+                       && g.ty >= visualKY - halfH && g.ty <= visualKY + halfH
           g.scored = inGoal && !blocked
           g.goals += g.scored ? 1 : 0
           g.shots += 1

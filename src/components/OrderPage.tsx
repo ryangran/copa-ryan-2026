@@ -369,8 +369,6 @@ export default function OrderPage() {
           <div className="suc-total-val">{fmt(sucTotal)}</div>
         </div>
 
-        <a href="/meus-pedidos" className="btn-meus-pedidos">📋 Ver meus pedidos</a>
-
         {pixQrUrl && (
           <div className="pix-box">
             <div className="pix-titulo">💳 Pague via PIX</div>

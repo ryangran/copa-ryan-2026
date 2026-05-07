@@ -46,7 +46,6 @@ export type Database = {
           pix_status: string | null
           ref: string | null
           telefone: string
-          token: string | null
           total: number
         }
         Insert: {
@@ -65,7 +64,6 @@ export type Database = {
           pix_status?: string | null
           ref?: string | null
           telefone: string
-          token?: string | null
           total?: number
         }
         Update: {
@@ -84,7 +82,6 @@ export type Database = {
           pix_status?: string | null
           ref?: string | null
           telefone?: string
-          token?: string | null
           total?: number
         }
         Relationships: []

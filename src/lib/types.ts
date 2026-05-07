@@ -22,7 +22,6 @@ export interface Order {
   entrega: string
   fonte: string
   pix_status?: string | null
-  token?: string | null
 }
 
 export interface AvisoConfig {

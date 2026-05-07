@@ -9,10 +9,10 @@ const SESSION_KEY = 'copa_adm_v1'
 
 const PRODS_MODAL = [
   { key: 'pacotes',        label: 'Pacotinhos de Figurinha', hint: `R$ ${(5.90).toFixed(2).replace('.', ',')} cada`, id: 'pacote',         nome: 'Figurinha Pacote',       preco: 5.90  },
-  { key: 'capaMole',       label: 'Capa Mole',               hint: `R$ ${(21.92).toFixed(2).replace('.', ',')} cada`, id: 'capaMole',       nome: 'Álbum Capa Mole',        preco: 21.92 },
-  { key: 'capaDuraNormal', label: 'Capa Dura Normal',        hint: `R$ ${(62.62).toFixed(2).replace('.', ',')} cada`, id: 'capaDuraNormal', nome: 'Álbum Capa Dura Normal', preco: 62.62 },
-  { key: 'capaDuraPrata',  label: 'Capa Dura Prata',         hint: `R$ ${(66.92).toFixed(2).replace('.', ',')} cada`, id: 'capaDuraPrata',  nome: 'Álbum Capa Dura Prata',  preco: 66.92 },
-  { key: 'capaDuraOuro',   label: 'Capa Dura Ouro ✨',       hint: `R$ ${(67.92).toFixed(2).replace('.', ',')} cada`, id: 'capaDuraOuro',   nome: 'Álbum Capa Dura Ouro ✨', preco: 67.92 },
+  { key: 'capaMole',       label: 'Capa Mole',               hint: `R$ ${(22.90).toFixed(2).replace('.', ',')} cada`, id: 'capaMole',       nome: 'Álbum Capa Mole',        preco: 22.90 },
+  { key: 'capaDuraNormal', label: 'Capa Dura Normal',        hint: `R$ ${(64.90).toFixed(2).replace('.', ',')} cada`, id: 'capaDuraNormal', nome: 'Álbum Capa Dura Normal', preco: 64.90 },
+  { key: 'capaDuraPrata',  label: 'Capa Dura Prata',         hint: `R$ ${(67.90).toFixed(2).replace('.', ',')} cada`, id: 'capaDuraPrata',  nome: 'Álbum Capa Dura Prata',  preco: 67.90 },
+  { key: 'capaDuraOuro',   label: 'Capa Dura Ouro ✨',       hint: `R$ ${(69.49).toFixed(2).replace('.', ',')} cada`, id: 'capaDuraOuro',   nome: 'Álbum Capa Dura Ouro ✨', preco: 69.49 },
 ]
 
 type MQtys = { pacotes: number; capaMole: number; capaDuraNormal: number; capaDuraPrata: number; capaDuraOuro: number }
@@ -37,7 +37,7 @@ export default function AdminPage() {
 
   const [precosPanelOpen, setPrecosPanelOpen] = useState(false)
   const [precosEdit, setPrecosEdit] = useState<Record<string, string>>({
-    pacote: '5.90', capaMole: '21.92', capaDuraNormal: '62.62', capaDuraPrata: '66.92', capaDuraOuro: '67.92',
+    pacote: '5.90', capaMole: '22.90', capaDuraNormal: '64.90', capaDuraPrata: '67.90', capaDuraOuro: '69.49',
   })
 
   const [modalOpen, setModalOpen] = useState(false)

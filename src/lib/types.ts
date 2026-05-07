@@ -33,14 +33,14 @@ export interface AvisoConfig {
 
 export const PRODUTOS = [
   { id: 'pacote',         nome: 'Pacote de Figurinhas',   emoji: '🎴', preco: 5.90,  destaque: true,  img: '/produtos/figurinha.png' },
-  { id: 'capaDuraOuro',   nome: 'Álbum Capa Dura Ouro',   emoji: '🥇', preco: 67.92, destaque: false, img: '/produtos/capa-dura-ouro.jpg' },
-  { id: 'capaDuraPrata',  nome: 'Álbum Capa Dura Prata',  emoji: '🥈', preco: 66.92, destaque: false, img: '/produtos/capa-dura-prata.jpg' },
-  { id: 'capaDuraNormal', nome: 'Álbum Capa Dura',        emoji: '📚', preco: 62.62, destaque: false, img: '/produtos/capa-dura.jpg' },
-  { id: 'capaMole',       nome: 'Álbum Capa Mole',        emoji: '📗', preco: 21.92, destaque: false, img: '/produtos/Capa-mole.jpg' },
+  { id: 'capaDuraOuro',   nome: 'Álbum Capa Dura Ouro',   emoji: '🥇', preco: 69.49, destaque: false, img: '/produtos/capa-dura-ouro.jpg' },
+  { id: 'capaDuraPrata',  nome: 'Álbum Capa Dura Prata',  emoji: '🥈', preco: 67.90, destaque: false, img: '/produtos/capa-dura-prata.jpg' },
+  { id: 'capaDuraNormal', nome: 'Álbum Capa Dura',        emoji: '📚', preco: 64.90, destaque: false, img: '/produtos/capa-dura.jpg' },
+  { id: 'capaMole',       nome: 'Álbum Capa Mole',        emoji: '📗', preco: 22.90, destaque: false, img: '/produtos/Capa-mole.jpg' },
 ]
 
 export const PRECOS: Record<string, number> = {
-  pacote: 5.90, capaMole: 21.92, capaDuraNormal: 62.62, capaDuraPrata: 66.92, capaDuraOuro: 67.92,
+  pacote: 5.90, capaMole: 22.90, capaDuraNormal: 64.90, capaDuraPrata: 67.90, capaDuraOuro: 69.49,
 }
 
 export const CUSTOS: Record<string, number> = {

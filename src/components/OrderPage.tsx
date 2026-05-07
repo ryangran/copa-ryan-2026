@@ -163,7 +163,6 @@ export default function OrderPage() {
       pago: false,
       entrega: 'pendente',
       fonte: 'online',
-      pix_status: 'aguardando',
     })
 
     if (insertError) {

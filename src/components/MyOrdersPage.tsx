@@ -59,8 +59,6 @@ export default function MyOrdersPage() {
   function handleFone(val: string) {
     const masked = maskFone(val)
     setTelefone(masked)
-    const d = val.replace(/\D/g, '')
-    if (d.length >= 10) buscar(masked)
   }
 
   return (
@@ -146,7 +144,7 @@ export default function MyOrdersPage() {
         )}
       </div>
 
-      <PenaltiGame />
+      {buscado && <PenaltiGame />}
 
       <div className="mp-rodape">🏆 Vendas Copa 2026 · Itu/SP</div>
     </div>

@@ -177,6 +177,28 @@ function drawKeeper(ctx: CanvasRenderingContext2D, kx: number, g: GS) {
     }
   }
 
+  // Make leading arm track the ball — transform ball pos to body-local space
+  if (phase === 'fly' || (phase === 'done' && !scored)) {
+    const keeperCX = kx + dx
+    const keeperCY = goalCY + dy
+    const cosR = Math.cos(-rot), sinR = Math.sin(-rot)
+    const relBX = (g.bx - keeperCX) / CHAR_SCALE
+    const relBY = (g.by - keeperCY) / CHAR_SCALE
+    const localBX = relBX * cosR - relBY * sinR
+    const localBY = relBX * sinR + relBY * cosR
+    // armL elevation: (2/π)*atan2(−toY, −toX) from left shoulder (−19,−10)
+    // armR elevation: (2/π)*atan2(−toY,  toX) from right shoulder (19,−10)
+    const trackP = phase === 'done' ? 1 : sub(t, 0.22, 0.85)
+    if (diveLeft || diveDir === 0) {
+      const tgt = clamp((2 / Math.PI) * Math.atan2(-(localBY + 10), -(localBX + 19)), -1.3, 1.3)
+      armL = lerp(armL, tgt, trackP)
+    }
+    if (diveRight || diveDir === 0) {
+      const tgt = clamp((2 / Math.PI) * Math.atan2(-(localBY + 10), localBX - 19), -1.3, 1.3)
+      armR = lerp(armR, tgt, trackP)
+    }
+  }
+
   // Shadow
   ctx.fillStyle = `rgba(0,0,0,${clamp(0.18 - Math.abs(dy) * 0.003, 0.05, 0.18)})`
   ctx.beginPath()

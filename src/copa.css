@@ -96,7 +96,7 @@ main{max-width:600px;margin:0 auto;padding:22px 16px 130px;}
 @media(min-width:601px){.total-sticky{display:none;}}
 
 /* ── SUCCESS ── */
-.sucesso-overlay{display:none;position:fixed;inset:0;background:linear-gradient(160deg,#001a00,#003d00);z-index:9999;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;}
+.sucesso-overlay{display:none;position:fixed;inset:0;background:linear-gradient(160deg,#001a00,#003d00);z-index:9999;flex-direction:column;align-items:center;justify-content:flex-start;padding:32px;text-align:center;overflow-y:auto;}
 .sucesso-overlay.show{display:flex;}
 .suc-icon{font-size:4.5rem;margin-bottom:14px;animation:popIn .4s cubic-bezier(.34,1.56,.64,1);}
 @keyframes popIn{from{transform:scale(0) rotate(-20deg)}to{transform:scale(1) rotate(0deg)}}
@@ -109,6 +109,16 @@ main{max-width:600px;margin:0 auto;padding:22px 16px 130px;}
 .btn-wpp:hover{background:#1da851;transform:translateY(-1px);}
 .btn-novo{background:transparent;color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.2);padding:10px 24px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:.85rem;cursor:pointer;transition:all .15s;}
 .btn-novo:hover{border-color:rgba(255,255,255,.4);color:rgba(255,255,255,.8);}
+.pix-box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:20px;margin:20px 0;width:100%;max-width:300px;}
+.pix-titulo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--amarelo);letter-spacing:2px;margin-bottom:4px;}
+.pix-subtitulo{font-size:.78rem;color:rgba(255,255,255,.6);margin-bottom:14px;}
+.pix-qr{width:200px;height:200px;border-radius:10px;background:#fff;padding:6px;display:block;margin:0 auto 14px;}
+.pix-info{display:flex;justify-content:space-between;font-size:.8rem;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.08);}
+.pix-info:last-of-type{border-bottom:none;}
+.pix-info-label{color:rgba(255,255,255,.5);}
+.pix-info-val{color:#fff;font-weight:600;}
+.btn-copiar-pix{margin-top:14px;width:100%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;padding:11px 20px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .15s;}
+.btn-copiar-pix:hover{background:rgba(255,255,255,.2);}
 
 /* ── TOAST ── */
 .toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(80px);background:#1a1a1a;color:#fff;padding:11px 22px;border-radius:100px;font-size:.84rem;font-weight:500;z-index:9998;transition:transform .3s;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;}

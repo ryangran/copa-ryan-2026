@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
+import QRCode from 'qrcode'
 import { supabase } from '@/lib/supabase'
 import { PRODUTOS, WPP_LOJA, AVISO_DEFAULT, fmt } from '@/lib/types'
 import type { AvisoConfig } from '@/lib/types'
+import { gerarPixBRCode } from '@/lib/pix'
 
 type Qtds = Record<string, number>
 
@@ -24,6 +26,8 @@ export default function OrderPage() {
   const [sucesso, setSucesso] = useState(false)
   const [sucTotal, setSucTotal] = useState(0)
   const [wppLink, setWppLink] = useState('')
+  const [pixQrUrl, setPixQrUrl] = useState('')
+  const [pixBrCode, setPixBrCode] = useState('')
   const [toast, setToast] = useState('')
   const [toastShow, setToastShow] = useState(false)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -40,6 +44,20 @@ export default function OrderPage() {
       .subscribe()
     return () => { supabase.removeChannel(ch) }
   }, [])
+
+  useEffect(() => {
+    if (!sucesso || sucTotal <= 0) return
+    const brCode = gerarPixBRCode({
+      chave: '61.986.179/0001-92',
+      nome: 'Ryan Granchelli',
+      cidade: 'Itu',
+      valor: sucTotal,
+    })
+    setPixBrCode(brCode)
+    QRCode.toDataURL(brCode, { width: 220, margin: 1 })
+      .then(url => setPixQrUrl(url))
+      .catch(() => setPixQrUrl(''))
+  }, [sucesso, sucTotal])
 
   function showToast(msg: string) {
     setToast(msg); setToastShow(true)
@@ -341,6 +359,33 @@ export default function OrderPage() {
           <div className="suc-total-label">Valor do pedido</div>
           <div className="suc-total-val">{fmt(sucTotal)}</div>
         </div>
+
+        {pixQrUrl && (
+          <div className="pix-box">
+            <div className="pix-titulo">💳 Pague via PIX</div>
+            <div className="pix-subtitulo">Escaneie o QR Code com o app do banco</div>
+            <img src={pixQrUrl} alt="QR Code PIX" className="pix-qr" />
+            <div className="pix-info">
+              <span className="pix-info-label">Beneficiário</span>
+              <span className="pix-info-val">Ryan Granchelli</span>
+            </div>
+            <div className="pix-info">
+              <span className="pix-info-label">Valor</span>
+              <span className="pix-info-val">{fmt(sucTotal)}</span>
+            </div>
+            <button
+              className="btn-copiar-pix"
+              onClick={() => {
+                navigator.clipboard.writeText(pixBrCode)
+                  .then(() => showToast('✅ Código PIX copiado!'))
+                  .catch(() => showToast('⚠️ Não foi possível copiar automaticamente.'))
+              }}
+            >
+              📋 Copiar código PIX
+            </button>
+          </div>
+        )}
+
         <a href={wppLink} className="btn-wpp" target="_blank" rel="noopener noreferrer">
           💬 Confirmar pelo WhatsApp
         </a>

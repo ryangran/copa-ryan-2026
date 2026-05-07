@@ -140,6 +140,20 @@ export default function OrderPage() {
     return errs
   }
 
+  async function notificarVenda(nomeCliente: string, valor: number) {
+    try {
+      await fetch('https://ntfy.sh/ryangran-copa2026-vendas', {
+        method: 'POST',
+        headers: {
+          'Title': 'Venda aprovada',
+          'Tags': 'white_check_mark,moneybag',
+          'Priority': 'high',
+        },
+        body: `${nomeCliente} — ${fmt(valor)}`,
+      })
+    } catch { /* silent */ }
+  }
+
   async function enviarPedido(e: React.FormEvent) {
     e.preventDefault()
     const errs = validar()
@@ -170,6 +184,8 @@ export default function OrderPage() {
       setEnviando(false)
       return
     }
+
+    notificarVenda(nome.trim(), total)
 
     const link = `https://wa.me/${WPP_LOJA}?text=${encodeURIComponent(texto)}`
     setWppLink(link)

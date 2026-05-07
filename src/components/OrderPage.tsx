@@ -215,6 +215,7 @@ export default function OrderPage() {
 
       <div className="aviso-itu">
         🏙️ Atendimento disponível somente para <span className="tag">Itu / SP</span>
+        <a href="/meus-pedidos" className="link-meus-pedidos">📋 Meus pedidos</a>
       </div>
 
       <main>

@@ -29,9 +29,13 @@ export function gerarPixBRCode(params: {
   const cidadeLimpa = cidade.normalize('NFD').replace(/[̀-ͯ]/g, '').substring(0, 15).trim()
   const txidLimpo = txid.replace(/[^a-zA-Z0-9*]/g, '').substring(0, 25) || '***'
 
+  const chaveLimpa = chave.replace(/\D/g, '').length === 11 || chave.replace(/\D/g, '').length === 14
+    ? chave.replace(/\D/g, '')
+    : chave
+
   const merchantAccount = tlv('26',
-    tlv('00', 'BR.GOV.BCB.PIX') +
-    tlv('01', chave)
+    tlv('00', 'br.gov.bcb.pix') +
+    tlv('01', chaveLimpa)
   )
 
   const additionalData = tlv('62', tlv('05', txidLimpo))

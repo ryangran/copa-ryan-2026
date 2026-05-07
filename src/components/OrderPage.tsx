@@ -152,7 +152,7 @@ export default function OrderPage() {
 
     const token = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10)
 
-    await supabase.from('orders').insert({
+    const { error: insertError } = await supabase.from('orders').insert({
       nome: nome.trim(),
       telefone: telefone.replace(/\D/g, ''),
       cep: cep.replace(/\D/g, ''),
@@ -169,6 +169,12 @@ export default function OrderPage() {
       pix_status: 'aguardando',
       token,
     })
+
+    if (insertError) {
+      setErros([`Erro ao enviar pedido: ${insertError.message}`])
+      setEnviando(false)
+      return
+    }
 
     setTrackUrl(`${window.location.origin}/pedido/${token}`)
 

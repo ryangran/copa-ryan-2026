@@ -21,6 +21,7 @@ export interface Order {
   pago: boolean
   entrega: string
   fonte: string
+  pix_status?: string | null
 }
 
 export interface AvisoConfig {

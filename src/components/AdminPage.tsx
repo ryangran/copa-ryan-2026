@@ -126,6 +126,18 @@ export default function AdminPage() {
     showToast(!c.pago ? `✅ ${c.nome} marcado como pago!` : `↩️ ${c.nome} voltou para pendente`)
   }
 
+  async function aprovarPix(id: number) {
+    const c = pedidos.find(x => x.id === id); if (!c) return
+    await supabase.from('orders').update({ pago: true, pix_status: 'aprovado' }).eq('id', id)
+    showToast(`✅ PIX de ${c.nome} aprovado!`)
+  }
+
+  async function recusarPix(id: number) {
+    const c = pedidos.find(x => x.id === id); if (!c) return
+    await supabase.from('orders').update({ pix_status: 'recusado' }).eq('id', id)
+    showToast(`❌ PIX de ${c.nome} recusado`)
+  }
+
   async function setEntrega(id: number, val: string) {
     const c = pedidos.find(x => x.id === id); if (!c) return
     await supabase.from('orders').update({ entrega: val, entregue: val === 'entregue' }).eq('id', id)
@@ -225,10 +237,12 @@ export default function AdminPage() {
   const previewTotal = calcTotal(previewItens())
 
   // ── FILTRO ──
+  const pixPendentes = pedidos.filter(c => c.pix_status === 'aguardando').length
   const pedidosFiltrados = pedidos.filter(c =>
     filtro === 'pendente' ? !c.pago :
     filtro === 'pago' ? c.pago :
-    filtro === 'entregue' ? c.entrega === 'entregue' : true
+    filtro === 'entregue' ? c.entrega === 'entregue' :
+    filtro === 'pix' ? c.pix_status === 'aguardando' : true
   )
 
   // ── TOTAIS ──
@@ -339,6 +353,18 @@ export default function AdminPage() {
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
           ))}
+          <button
+            className={`filter-btn${filtro === 'pix' ? ' active' : ''}`}
+            style={{ position: 'relative' }}
+            onClick={() => setFiltro('pix')}
+          >
+            💳 PIX
+            {pixPendentes > 0 && (
+              <span style={{ position: 'absolute', top: -6, right: -6, background: '#f59e0b', color: '#fff', borderRadius: '50%', width: 18, height: 18, fontSize: '0.65rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {pixPendentes}
+              </span>
+            )}
+          </button>
           <button className="add-btn" onClick={abrirModal}>➕ Novo Cliente</button>
         </div>
 
@@ -351,13 +377,20 @@ export default function AdminPage() {
               const temTel = (c.telefone ?? '').replace(/\D/g, '').length > 0
               const itens = c.itens ?? []
               return (
-                <div key={c.id} className={`card${c.pago ? ' pago' : ''}${isOnline ? ' online' : ''}`}>
+                <div key={c.id} className={`card${c.pago ? ' pago' : ''}${isOnline ? ' online' : ''}${c.pix_status === 'aguardando' ? ' pix-aguardando' : ''}`}>
+                  {c.pix_status === 'aguardando' && (
+                    <div className="pix-pending-banner">
+                      ⏳ Aguardando aprovação do PIX
+                    </div>
+                  )}
                   <div className="card-header">
                     <div className="client-avatar">{c.nome.charAt(0).toUpperCase()}</div>
                     <div className="client-info">
                       <div className="client-name">
                         {c.nome}
                         {isOnline && <span className="online-tag">🌐 Online</span>}
+                        {c.pix_status === 'aprovado' && <span className="pix-tag aprovado">💳 PIX Aprovado</span>}
+                        {c.pix_status === 'recusado' && <span className="pix-tag recusado">❌ PIX Recusado</span>}
                       </div>
                       {c.ref && <div className="client-ref">{c.ref}</div>}
                     </div>
@@ -389,6 +422,12 @@ export default function AdminPage() {
                     <div className="total-label">Total</div>
                     <div className="total-value">{fmt(c.total)}</div>
                   </div>
+                  {c.pix_status === 'aguardando' && (
+                    <div className="pix-actions">
+                      <button className="pix-btn aprovar" onClick={() => aprovarPix(c.id)}>✅ Aprovar PIX</button>
+                      <button className="pix-btn recusar" onClick={() => recusarPix(c.id)}>❌ Recusar</button>
+                    </div>
+                  )}
                   <div className="card-actions">
                     <div className="action-left">
                       <button className="zap-btn" onClick={() => setZapId(c.id)} title={temTel ? 'Enviar mensagem' : 'Sem número cadastrado'}>

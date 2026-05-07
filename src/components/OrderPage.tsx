@@ -26,6 +26,7 @@ export default function OrderPage() {
   const [sucesso, setSucesso] = useState(false)
   const [sucTotal, setSucTotal] = useState(0)
   const [wppLink, setWppLink] = useState('')
+  const [sucId, setSucId] = useState<number | null>(null)
   const [pixQrUrl, setPixQrUrl] = useState('')
   const [pixBrCode, setPixBrCode] = useState('')
   const [toast, setToast] = useState('')
@@ -47,6 +48,9 @@ export default function OrderPage() {
 
   useEffect(() => {
     if (!sucesso || sucTotal <= 0) return
+    if (sucId !== null) {
+      supabase.from('orders').update({ pix_status: 'aguardando' }).eq('id', sucId).then(() => {})
+    }
     const brCode = gerarPixBRCode({
       chave: '61.986.179/0001-92',
       nome: 'Ryan Granchelli',
@@ -57,7 +61,7 @@ export default function OrderPage() {
     QRCode.toDataURL(brCode, { width: 220, margin: 1 })
       .then(url => setPixQrUrl(url))
       .catch(() => setPixQrUrl(''))
-  }, [sucesso, sucTotal])
+  }, [sucesso, sucTotal, sucId])
 
   function showToast(msg: string) {
     setToast(msg); setToastShow(true)
@@ -149,7 +153,7 @@ export default function OrderPage() {
 
     const texto = buildTexto()
 
-    await supabase.from('orders').insert({
+    const { data: inserted } = await supabase.from('orders').insert({
       nome: nome.trim(),
       telefone: telefone.replace(/\D/g, ''),
       cep: cep.replace(/\D/g, ''),
@@ -163,7 +167,8 @@ export default function OrderPage() {
       pago: false,
       entrega: 'pendente',
       fonte: 'online',
-    })
+    }).select('id').single()
+    if (inserted) setSucId(inserted.id)
 
     const link = `https://wa.me/${WPP_LOJA}?text=${encodeURIComponent(texto)}`
     setWppLink(link)
@@ -173,7 +178,8 @@ export default function OrderPage() {
   }
 
   function novoPedido() {
-    setSucesso(false); setQtys({}); setNome(''); setTelefone(''); setCep('')
+    setSucesso(false); setSucId(null); setPixQrUrl(''); setPixBrCode('')
+    setQtys({}); setNome(''); setTelefone(''); setCep('')
     setLogradouro(''); setBairro(''); setComplemento(''); setObs(''); setErros([])
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }

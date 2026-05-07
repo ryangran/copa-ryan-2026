@@ -43,6 +43,7 @@ export type Database = {
           nome: string
           obs: string | null
           pago: boolean
+          pix_status: string | null
           ref: string | null
           telefone: string
           total: number
@@ -60,6 +61,7 @@ export type Database = {
           nome: string
           obs?: string | null
           pago?: boolean
+          pix_status?: string | null
           ref?: string | null
           telefone: string
           total?: number
@@ -77,6 +79,7 @@ export type Database = {
           nome?: string
           obs?: string | null
           pago?: boolean
+          pix_status?: string | null
           ref?: string | null
           telefone?: string
           total?: number

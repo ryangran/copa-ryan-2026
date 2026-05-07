@@ -193,7 +193,18 @@ footer{text-align:center;padding:18px 16px;font-size:.72rem;color:#888;backgroun
 .card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.09);}
 .card.pago{border-color:var(--verde-claro);background:#f0fff6;}
 .card.online{border-top:3px solid #0066cc;}
+.card.pix-aguardando{border-top:3px solid #f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.2);}
 .online-tag{display:inline-flex;align-items:center;gap:3px;font-size:.6rem;font-weight:700;background:#dbeafe;color:#1d4ed8;border-radius:100px;padding:2px 8px;letter-spacing:.5px;vertical-align:middle;margin-left:5px;}
+.pix-tag{display:inline-flex;align-items:center;gap:3px;font-size:.6rem;font-weight:700;border-radius:100px;padding:2px 8px;letter-spacing:.5px;vertical-align:middle;margin-left:5px;}
+.pix-tag.aprovado{background:#d1fae5;color:#065f46;}
+.pix-tag.recusado{background:#fee2e2;color:#991b1b;}
+.pix-pending-banner{background:#fef3c7;border-bottom:1px solid #fcd34d;padding:8px 16px;font-size:.78rem;font-weight:700;color:#92400e;text-align:center;border-radius:8px 8px 0 0;}
+.pix-actions{display:flex;gap:8px;padding:10px 16px;background:#fffbeb;border-top:1px solid #fde68a;}
+.pix-btn{flex:1;padding:9px 0;border-radius:8px;border:none;font-weight:700;font-size:.82rem;cursor:pointer;transition:opacity .15s;}
+.pix-btn.aprovar{background:#059669;color:#fff;}
+.pix-btn.aprovar:hover{opacity:.85;}
+.pix-btn.recusar{background:#dc2626;color:#fff;}
+.pix-btn.recusar:hover{opacity:.85;}
 .obs-linha{font-size:.74rem;color:#555;background:#fafafa;border-top:1px dashed var(--borda);padding:7px 17px;font-style:italic;}
 
 .card-header{display:flex;align-items:center;justify-content:space-between;padding:15px 17px 11px;border-bottom:1px solid var(--borda);gap:8px;}

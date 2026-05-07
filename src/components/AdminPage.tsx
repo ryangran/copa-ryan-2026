@@ -35,6 +35,11 @@ export default function AdminPage() {
   const [avisoMsg, setAvisoMsg] = useState(AVISO_DEFAULT.mensagem)
   const [avisoRodape, setAvisoRodape] = useState(AVISO_DEFAULT.rodape)
 
+  const [precosPanelOpen, setPrecosPanelOpen] = useState(false)
+  const [precosEdit, setPrecosEdit] = useState<Record<string, string>>({
+    pacote: '5.90', capaMole: '21.92', capaDuraNormal: '62.62', capaDuraPrata: '66.92', capaDuraOuro: '67.92',
+  })
+
   const [modalOpen, setModalOpen] = useState(false)
   const [editId, setEditId] = useState<number | null>(null)
   const [mNome, setMNome] = useState('')
@@ -64,7 +69,9 @@ export default function AdminPage() {
       ch = supabase.channel('admin-rt')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => carregar())
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'config' }, (p) => {
-          if ((p.new as { key: string }).key === 'aviso') applyAviso((p.new as { key: string; value: AvisoConfig }).value)
+          const row = p.new as { key: string; value: unknown }
+          if (row.key === 'aviso') applyAviso(row.value as AvisoConfig)
+          if (row.key === 'precos') applyPrecos(row.value as Record<string, number>)
         })
         .subscribe()
     } catch { /* realtime indisponível */ }
@@ -79,12 +86,28 @@ export default function AdminPage() {
     setAvisoRodape(cfg.rodape ?? '')
   }
 
+  function applyPrecos(cfg: Record<string, number>) {
+    if (!cfg) return
+    setPrecosEdit(prev => ({ ...prev, ...Object.fromEntries(Object.entries(cfg).map(([k, v]) => [k, String(v)])) }))
+  }
+
+  async function salvarPrecos() {
+    const parsed: Record<string, number> = {}
+    for (const [k, v] of Object.entries(precosEdit)) {
+      const n = parseFloat(String(v).replace(',', '.'))
+      if (!isNaN(n) && n > 0) parsed[k] = n
+    }
+    await supabase.from('config').upsert({ key: 'precos', value: parsed as unknown as import('@/integrations/supabase/types').Json })
+    showToast('✅ Preços salvos com sucesso!')
+  }
+
   async function carregar() {
     setSyncMsg('🔄 Sincronizando...')
     try {
-      const [ordersRes, cfgRes] = await Promise.all([
+      const [ordersRes, cfgRes, precosRes] = await Promise.all([
         supabase.from('orders').select('*').order('created_at', { ascending: false }),
         supabase.from('config').select('value').eq('key', 'aviso').maybeSingle(),
+        supabase.from('config').select('value').eq('key', 'precos').maybeSingle(),
       ])
       if (ordersRes.data) {
         const orders = (ordersRes.data as unknown as Order[]).map(o => ({
@@ -94,6 +117,7 @@ export default function AdminPage() {
         setPedidos(orders)
       }
       if (cfgRes.data?.value) applyAviso(cfgRes.data.value as unknown as AvisoConfig)
+      if (precosRes.data?.value) applyPrecos(precosRes.data.value as unknown as Record<string, number>)
     } catch { /* falha silenciosa */ }
     setSyncMsg('')
   }
@@ -342,6 +366,42 @@ export default function AdminPage() {
             </div>
             <button className="aviso-save-btn" onClick={salvarAviso}>💾 SALVAR NOTIFICAÇÃO</button>
             <p className="aviso-hint">As alterações aparecem imediatamente para quem abrir o site.</p>
+          </div>
+        </div>
+
+        {/* PREÇOS CTRL */}
+        <div className="aviso-ctrl">
+          <div className="aviso-ctrl-header" onClick={() => setPrecosPanelOpen(o => !o)}>
+            <span style={{ fontSize: '1rem' }}>💰</span>
+            <span className="aviso-ctrl-title">Preços dos Produtos</span>
+            <span className={`aviso-chevron${precosPanelOpen ? ' open' : ''}`}>▼</span>
+          </div>
+          <div className={`aviso-ctrl-body${precosPanelOpen ? ' open' : ''}`}>
+            <p className="aviso-hint" style={{ marginBottom: 14 }}>Altere os preços e clique em Salvar. As mudanças valem imediatamente no site de pedidos.</p>
+            {[
+              { key: 'pacote',         label: '🎴 Pacotinho de Figurinha' },
+              { key: 'capaMole',       label: '📗 Álbum Capa Mole' },
+              { key: 'capaDuraNormal', label: '📚 Álbum Capa Dura' },
+              { key: 'capaDuraPrata',  label: '🥈 Álbum Capa Dura Prata' },
+              { key: 'capaDuraOuro',   label: '🥇 Álbum Capa Dura Ouro' },
+            ].map(p => (
+              <div key={p.key} className="aviso-field" style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                <label style={{ flex: 1, marginBottom: 0, fontSize: '0.88rem' }}>{p.label}</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span style={{ color: 'var(--sub)', fontSize: '0.82rem', fontWeight: 600 }}>R$</span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    className="aviso-input"
+                    style={{ width: 90, textAlign: 'right', padding: '6px 10px' }}
+                    value={precosEdit[p.key] ?? ''}
+                    onChange={e => setPrecosEdit(prev => ({ ...prev, [p.key]: e.target.value }))}
+                  />
+                </div>
+              </div>
+            ))}
+            <button className="aviso-save-btn" onClick={salvarPrecos}>💾 SALVAR PREÇOS</button>
           </div>
         </div>
 

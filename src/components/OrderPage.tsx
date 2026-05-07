@@ -8,6 +8,7 @@ import { gerarPixBRCode } from '@/lib/pix'
 type Qtds = Record<string, number>
 
 export default function OrderPage() {
+  const [produtos, setProdutos] = useState(PRODUTOS)
   const [aviso, setAviso] = useState<AvisoConfig>(AVISO_DEFAULT)
   const [avisoFechado, setAvisoFechado] = useState(false)
   const [qtys, setQtys] = useState<Qtds>({})
@@ -32,14 +33,22 @@ export default function OrderPage() {
   const [toastShow, setToastShow] = useState(false)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
+  function applyPrecos(cfg: Record<string, number>) {
+    if (!cfg) return
+    setProdutos(prev => prev.map(p => cfg[p.id] != null ? { ...p, preco: cfg[p.id] } : p))
+  }
+
   useEffect(() => {
     supabase.from('config').select('value').eq('key', 'aviso').single()
       .then(({ data }) => { if (data) setAviso(data.value as unknown as AvisoConfig) })
+    supabase.from('config').select('value').eq('key', 'precos').maybeSingle()
+      .then(({ data }) => { if (data?.value) applyPrecos(data.value as unknown as Record<string, number>) })
 
     const ch = supabase.channel('order-cfg')
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'config' }, (p) => {
-        if ((p.new as { key: string }).key === 'aviso')
-          setAviso((p.new as { key: string; value: AvisoConfig }).value)
+        const row = p.new as { key: string; value: unknown }
+        if (row.key === 'aviso') setAviso(row.value as AvisoConfig)
+        if (row.key === 'precos') applyPrecos(row.value as Record<string, number>)
       })
       .subscribe()
     return () => { supabase.removeChannel(ch) }
@@ -103,7 +112,7 @@ export default function OrderPage() {
     } catch { /* silent */ }
   }
 
-  const ativos = PRODUTOS.filter(p => (qtys[p.id] ?? 0) > 0)
+  const ativos = produtos.filter(p => (qtys[p.id] ?? 0) > 0)
   const total = ativos.reduce((s, p) => s + p.preco * (qtys[p.id] ?? 0), 0)
 
   function buildTexto() {
@@ -237,7 +246,7 @@ export default function OrderPage() {
         {/* PRODUTOS */}
         <div className="sec-title">🎴 Produtos</div>
         <div className="produtos-grid">
-          {PRODUTOS.map(p => {
+          {produtos.map(p => {
             const qty = qtys[p.id] ?? 0
             return (
               <div key={p.id} className={`prod-card${p.destaque ? ' destaque' : ''}${qty > 0 ? ' selected' : ''}`}>

@@ -36,7 +36,7 @@ export const PRODUTOS = [
   { id: 'capaDuraOuro',   nome: 'Álbum Capa Dura Ouro',   emoji: '🥇', preco: 67.92, destaque: false, img: '/produtos/capa-dura-ouro.jpg' },
   { id: 'capaDuraPrata',  nome: 'Álbum Capa Dura Prata',  emoji: '🥈', preco: 66.92, destaque: false, img: '/produtos/capa-dura-prata.jpg' },
   { id: 'capaDuraNormal', nome: 'Álbum Capa Dura',        emoji: '📚', preco: 62.62, destaque: false, img: '/produtos/capa-dura.jpg' },
-  { id: 'capaMole',       nome: 'Álbum Capa Mole',        emoji: '📗', preco: 21.92, destaque: false, img: null },
+  { id: 'capaMole',       nome: 'Álbum Capa Mole',        emoji: '📗', preco: 21.92, destaque: false, img: '/produtos/Capa-mole.jpg' },
 ]
 
 export const PRECOS: Record<string, number> = {

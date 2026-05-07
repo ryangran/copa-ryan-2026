@@ -97,7 +97,11 @@ export default function AdminPage() {
       const n = parseFloat(String(v).replace(',', '.'))
       if (!isNaN(n) && n > 0) parsed[k] = n
     }
-    await supabase.from('config').upsert({ key: 'precos', value: parsed as unknown as import('@/integrations/supabase/types').Json })
+    const val = parsed as unknown as import('@/integrations/supabase/types').Json
+    const { data } = await supabase.from('config').update({ value: val }).eq('key', 'precos').select()
+    if (!data || data.length === 0) {
+      await supabase.from('config').insert({ key: 'precos', value: val })
+    }
     showToast('✅ Preços salvos com sucesso!')
   }
 

@@ -22,6 +22,8 @@ type GS = {
   goals: number; shots: number
   scored: boolean
   idleT: number
+  goalsSinceLastSave: number
+  forceBlock: boolean
 }
 
 // interpolate across keyframes: [[t, v0, v1, ...], ...]
@@ -599,6 +601,7 @@ export default function PenaltiGame() {
     hx: -1, hy: -1,
     goals: 0, shots: 0,
     scored: false, idleT: 0,
+    goalsSinceLastSave: 0, forceBlock: false,
   })
 
   function draw() {
@@ -657,7 +660,15 @@ export default function PenaltiGame() {
           const inGoal = g.tx >= GL && g.tx <= GR && g.ty >= GT && g.ty <= GB
           const blocked = g.tx >= visualKX - halfW && g.tx <= visualKX + halfW
                        && g.ty >= visualKY - halfH && g.ty <= visualKY + halfH
-          g.scored = inGoal && !blocked
+          if (g.forceBlock) {
+            g.scored = false
+            g.goalsSinceLastSave = 0
+            g.forceBlock = false
+          } else {
+            g.scored = inGoal && !blocked
+            if (g.scored) g.goalsSinceLastSave++
+            else g.goalsSinceLastSave = 0
+          }
           g.goals += g.scored ? 1 : 0
           g.shots += 1
           g.phase = 'done'
@@ -694,9 +705,18 @@ export default function PenaltiGame() {
     if (g.phase !== 'idle') return
     const { cx, cy } = getCanvasPos(e)
     if (cx < GL || cx > GR || cy < GT || cy > GB) return
-    const keeperTargets = [GL + GW * 0.17, W / 2, GL + GW * 0.83]
     g.tx = cx; g.ty = cy
-    g.ktx = keeperTargets[Math.floor(Math.random() * 3)]
+    g.forceBlock = g.goalsSinceLastSave >= 2
+    if (g.forceBlock) {
+      // Keeper goes exactly to ball: ktx = tx − dive-offset so visual center lands on tx
+      const dd = cx < W/2 - 28 ? -1 : cx > W/2 + 28 ? 1 : 0
+      const hi = cy < GT + GH * 0.38
+      const fdx = hi ? dd * 16 : dd !== 0 ? dd * 60 : 0
+      g.ktx = cx - fdx
+    } else {
+      const keeperTargets = [GL + GW * 0.17, W / 2, GL + GW * 0.83]
+      g.ktx = keeperTargets[Math.floor(Math.random() * 3)]
+    }
     g.phase = 'fly'; g.t = 0
     setPhase('fly')
   }

@@ -245,6 +245,7 @@ export default function AdminPage() {
       `Olá, ${c.nome}! 🏆🇧🇷\n\nPassando para confirmar o valor do seu pedido das figurinhas da Copa:\n\n📦 *Pedido:* ${resumo}\n💰 *Total: ${total}*\n\nPara pagamento via Pix:\n🔑 *Chave:* ${PIX_CHAVE}\n👤 *Beneficiário:* ${PIX_NOME}\n\nQualquer dúvida é só falar! 🙏`,
       `Olá, ${c.nome}! 🏆🇧🇷\n\nPassando para confirmar o seu pedido das figurinhas da Copa do Mundo:\n\n📦 *${resumo}*\n💰 *Total: ${total}*\n\nEstá certo assim? Me confirma para eu separar! 😄`,
       `Boa notícia, ${c.nome}! 🏆🇧🇷\n\nSeu pedido das figurinhas da Copa chegou e já está separadinho:\n\n📦 *${resumo}*\n\nCombina de nos falar quando puder retirar! 😄`,
+      `Olá, ${c.nome}! 🏆🇧🇷\n\nPassando para avisar que nosso sistema ainda *não identificou o seu pagamento*. 😕\n\nCaso já tenha pago, pode desconsiderar essa mensagem e nos manda o comprovante para confirmar!\n\nCaso ainda não tenha pago, segue a chave Pix:\n🔑 *Chave:* ${PIX_CHAVE}\n👤 *Beneficiário:* ${PIX_NOME}\n💰 *Total: ${total}*\n\nQualquer dúvida é só falar! 🙏`,
     ]
     const texto = msgs[tipo]
     if (navigator.clipboard?.writeText) {
@@ -631,9 +632,10 @@ export default function AdminPage() {
           {zapPedido && zapPedido.telefone.replace(/\D/g, '').length === 0
             ? <div className="zap-no-phone">Nenhum número cadastrado para <strong>{zapPedido.nome}</strong>.<br /><br />Edite o cliente para adicionar o WhatsApp.</div>
             : zapPedido && [
-              { icon: '💰', label: 'Cobrança Pix',     desc: 'Enviar valor total + chave Pix' },
-              { icon: '✅', label: 'Confirmar Pedido', desc: 'Enviar resumo do pedido para confirmar' },
-              { icon: '🚀', label: 'Pedido Chegou!',   desc: 'Avisar que o pedido chegou' },
+              { icon: '💰', label: 'Cobrança Pix',        desc: 'Enviar valor total + chave Pix' },
+              { icon: '✅', label: 'Confirmar Pedido',   desc: 'Enviar resumo do pedido para confirmar' },
+              { icon: '🚀', label: 'Pedido Chegou!',     desc: 'Avisar que o pedido chegou' },
+              { icon: '❓', label: 'Pagamento não identificado', desc: 'Sistema não reconheceu o pagamento' },
             ].map((m, i) => (
               <div key={i} className="zap-option" onClick={() => zapPedido && enviarZap(zapPedido, i)}>
                 <div className="zap-option-icon">{m.icon}</div>
